@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>로그인</title>
+  <th:block th:replace="fragments/layout :: cssjs"/>
+</head>
+<body>
+
+<div th:replace="fragments/layout :: header"></div>
+
+<div class="container">
+  <form method="post">
+    <div class="mb-3">
+      <label class="form-label" for="username">아이디</label>
+      <input class="form-control" id="username" name="username" type="text">
+    </div>
+    <div class="mb-3">
+      <label class="form-label" for="password">암호</label>
+      <input class="form-control" id="password" name="password" type="password">
+    </div>
+    <button class="btn btn-primary" type="submit">로그인</button>
+  </form>
+</div>
+
+<hr>
+<div th:replace="fragments/layout :: footer"></div>
+</body>
+</html>
