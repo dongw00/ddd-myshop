@@ -9,9 +9,9 @@ import com.example.myshop.order.command.domain.Order;
 import com.example.myshop.order.command.domain.OrderLine;
 import com.example.myshop.order.command.domain.OrderNo;
 import com.example.myshop.order.command.domain.OrderRepository;
-import com.example.myshop.order.command.domain.OrderService;
 import com.example.myshop.order.command.domain.OrderState;
 import com.example.myshop.order.command.domain.Orderer;
+import com.example.myshop.order.command.domain.OrdererService;
 import com.example.myshop.order.command.exception.NoOrderProductException;
 import com.example.myshop.order.command.validator.OrderRequestValidator;
 import java.util.ArrayList;
@@ -27,7 +27,7 @@ public class PlaceOrderService {
 
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
-    private final OrderService orderService;
+    private final OrdererService ordererService;
 
     @Transactional
     public OrderNo placeOrder(OrderRequest orderRequest) {
@@ -45,7 +45,7 @@ public class PlaceOrderService {
         }
 
         OrderNo orderNo = orderRepository.nextOrderNo();
-        Orderer orderer = orderService.createOrderer(orderRequest.getOrdererMemberId());
+        Orderer orderer = ordererService.createOrderer(orderRequest.getOrdererMemberId());
 
         Order order = new Order(orderNo, orderer, orderLines, orderRequest.getShippingInfo(),
             OrderState.PAYMENT_WAITING);

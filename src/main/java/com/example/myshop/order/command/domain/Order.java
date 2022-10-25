@@ -4,13 +4,29 @@ import com.example.myshop.common.jpa.MoneyConverter;
 import com.example.myshop.common.model.Money;
 import com.example.myshop.order.command.exception.AlreadyShippedException;
 import com.example.myshop.order.command.exception.OrderAlreadyCanceledException;
-import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
-
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import javax.persistence.Access;
+import javax.persistence.AccessType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.Convert;
+import javax.persistence.ElementCollection;
+import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.OrderColumn;
+import javax.persistence.Table;
+import javax.persistence.Version;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @Table(name = "purchase_order")
 @Access(AccessType.FIELD)
@@ -46,7 +62,7 @@ public class Order {
     private LocalDateTime orderDate;
 
     public Order(OrderNo number, Orderer orderer, List<OrderLine> orderLines,
-                 ShippingInfo shippingInfo, OrderState state) {
+        ShippingInfo shippingInfo, OrderState state) {
         setNumber(number);
         setOrderer(orderer);
         setOrderLines(orderLines);
@@ -57,15 +73,17 @@ public class Order {
     }
 
     private void setNumber(OrderNo number) {
-        if (number == null)
+        if (number == null) {
             throw new IllegalArgumentException("No number");
+        }
 
         this.number = number;
     }
 
     private void setOrderer(Orderer orderer) {
-        if (orderer == null)
+        if (orderer == null) {
             throw new IllegalArgumentException("No order");
+        }
 
         this.orderer = orderer;
     }
@@ -84,13 +102,14 @@ public class Order {
 
     private void calculateTotalAmounts() {
         this.totalAmounts = new Money(orderLines.stream()
-                .mapToInt(x -> x.getAmounts().getValue())
-                .sum());
+            .mapToInt(x -> x.getAmounts().getValue())
+            .sum());
     }
 
     private void setShippingInfo(ShippingInfo shippingInfo) {
-        if (shippingInfo == null)
+        if (shippingInfo == null) {
             throw new IllegalArgumentException("No Shipping info");
+        }
 
         this.shippingInfo = shippingInfo;
     }
@@ -101,8 +120,9 @@ public class Order {
     }
 
     private void verifyNotYetShipped() {
-        if (!isNotYetShipped())
+        if (!isNotYetShipped()) {
             throw new AlreadyShippedException();
+        }
     }
 
     public boolean isNotYetShipped() {
@@ -122,6 +142,11 @@ public class Order {
         if (state == OrderState.CANCELED) {
             throw new OrderAlreadyCanceledException();
         }
+    }
+
+    public void cancel() {
+        verifyNotYetShipped();
+        this.state = OrderState.CANCELED;
     }
 
 }

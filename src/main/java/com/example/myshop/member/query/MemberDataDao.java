@@ -1,5 +1,6 @@
 package com.example.myshop.member.query;
 
+import com.example.myshop.common.jpa.Rangeable;
 import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
@@ -17,7 +18,7 @@ public interface MemberDataDao extends Repository<MemberData, String> {
 
     List<MemberData> findAll(Specification<MemberData> spec, Pageable pageable);
 
-    List<MemberData> getRange(Specification<MemberData> spec, Pageable pageable);
+    List<MemberData> getRange(Specification<MemberData> spec, Rangeable pageable);
 
     List<MemberData> findFirst3ByNameLikeOrderByName(String name);
 

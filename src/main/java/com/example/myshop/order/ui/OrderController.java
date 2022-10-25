@@ -1,4 +1,4 @@
-package com.example.myshop.order.command.ui;
+package com.example.myshop.order.ui;
 
 import com.example.myshop.catalog.query.product.ProductData;
 import com.example.myshop.catalog.query.product.ProductQueryService;
